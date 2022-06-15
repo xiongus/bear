@@ -1,0 +1,143 @@
+plugins {
+    id 'idea'
+    id 'java'
+    id 'jacoco'
+    id 'java-library'
+    id 'checkstyle'
+    id 'org.springframework.boot' version '2.7.0' apply false
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE' apply false
+}
+
+
+configure(allprojects) { project ->
+    apply plugin: "io.spring.dependency-management"
+
+    dependencyManagement {
+        imports {
+            mavenBom 'org.springframework.boot:spring-boot-dependencies:2.7.0'
+            mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2021.0.3'
+            mavenBom "com.fasterxml.jackson:jackson-bom:2.13.3"
+            mavenBom "org.junit:junit-bom:5.8.2"
+        }
+        dependencies {
+            dependencySet(group: 'org.apache.logging.log4j', version: '2.17.2') {
+                entry 'log4j-api'
+                entry 'log4j-core'
+                entry 'log4j-jul'
+                entry 'log4j-slf4j-impl'
+            }
+            dependency "org.slf4j:slf4j-api:1.7.36"
+            dependency("com.google.code.findbugs:findbugs:3.0.1") {
+                exclude group: "dom4j", name: "dom4j"
+            }
+            dependency "com.google.code.findbugs:jsr305:3.0.2"
+            dependency 'com.google.guava:guava:31.1-jre'
+            dependency "com.google.code.gson:gson:2.9.0"
+
+            dependencySet(group: 'org.aspectj', version: '1.9.9.1') {
+                entry 'aspectjrt'
+                entry 'aspectjtools'
+                entry 'aspectjweaver'
+            }
+            dependencySet(group: 'org.apache.groovy', version: '4.0.3') {
+                entry 'groovy'
+                entry 'groovy-jsr223'
+                entry 'groovy-templates'
+                entry 'groovy-xml'
+            }
+        }
+        generatedPomCustomization {
+            enabled = false
+        }
+        resolutionStrategy {
+            cacheChangingModulesFor 0, "seconds"
+        }
+        repositories {
+            mavenCentral()
+            maven { url "https://repo.spring.io/libs-spring-framework-build" }
+            maven { url "https://repo.spring.io/milestone" }
+        }
+    }
+    configurations.all {
+        resolutionStrategy {
+            cacheChangingModulesFor 0, "seconds"
+            cacheDynamicVersionsFor 0, "seconds"
+        }
+    }
+}
+
+configure(subprojects) { project ->
+    group = "com.xiongus"
+
+    apply plugin: "java"
+    apply plugin: "jacoco"
+    apply plugin: "java-library"
+    apply plugin: "checkstyle"
+
+    jacoco {
+        toolVersion = "0.8.7"
+        reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.required = false
+            csv.required = false
+            html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+        }
+    }
+
+    jacocoTestCoverageVerification {
+        violationRules {
+            rule {
+                limit {
+                    minimum = 0.5
+                }
+            }
+
+            rule {
+                enabled = false
+                element = 'CLASS'
+                includes = ['com.xiongus.*']
+
+                limit {
+                    counter = 'LINE'
+                    value = 'TOTALCOUNT'
+                    maximum = 0.3
+                }
+            }
+        }
+    }
+
+    checkstyle {
+        toolVersion = "10.3"
+        configFile = rootProject.file('config/checkstyle/google_checks.xml')
+    }
+
+
+    plugins.withType(JavaPlugin) {
+        project.sourceCompatibility = JavaVersion.VERSION_17
+    }
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+        options.compilerArgs.add("-parameters")
+    }
+
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+
+    dependencies {
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+    }
+
+    test {
+        // report is always generated after tests run
+        finalizedBy jacocoTestReport
+    }
+
+    jacocoTestReport {
+        // tests are required to run before generating the report
+        dependsOn test
+    }
+}
