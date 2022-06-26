@@ -1,39 +1,37 @@
 package com.xiongus.bear.console.entity;
 
+import com.xiongus.bear.common.entity.BaseEntity;
 import java.io.Serial;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 /**
- * t_sys_role.
+ * 角色表 Entity.
  *
  * @author xiongus
  */
-@Data
+@Getter
+@Setter
 @Entity
-@Table(name = "t_sys_role")
-public class Roles implements Serializable {
-
-  @Serial private static final long serialVersionUID = 2669283083422943674L;
-
-  /** 标识角色的唯一ID */
-  @Id
-  @Column(name = "id", nullable = true, length = 20)
-  private Long id;
-
-  /** 角色标识 default : '' */
-  @Column(name = "role", nullable = true, length = 256)
-  private String role;
+@Table(name = "roles")
+@SQLDelete(
+    sql =
+        "UPDATE roles SET deleted = 1, deleted_time = ROUND(UNIX_TIMESTAMP(NOW(4))*1000) WHERE id = ?")
+@Where(clause = "deleted = 0")
+public class Roles extends BaseEntity implements Serializable {
+  @Serial private static final long serialVersionUID = 7009470794519285690L;
 
   /** 角色名称 default : '' */
-  @Column(name = "name", nullable = true, length = 256)
+  @Column(name = "name", length = 256, columnDefinition = "角色名称")
   private String name;
 
-  /** 1: deleted, 0: normal default : b'0' */
-  @Column(name = "deleted", nullable = true, length = 1)
-  private String deleted;
+  /** 角色标识 default : '' */
+  @Column(name = "role", length = 256, columnDefinition = "角色标识")
+  private String role;
 }

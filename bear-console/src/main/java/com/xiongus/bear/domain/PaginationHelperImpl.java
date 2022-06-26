@@ -10,40 +10,35 @@ import org.springframework.jdbc.core.RowMapper;
  * @param <E> Generic class
  * @author xiongus
  */
-public class PaginationHelperImpl<E> implements PaginationHelper<E> {
-
-  private final JdbcTemplate jdbcTemplate;
-
-  public PaginationHelperImpl(JdbcTemplate jdbcTemplate) {
-    this.jdbcTemplate = jdbcTemplate;
-  }
+public record PaginationHelperImpl<E>(
+        JdbcTemplate jdbcTemplate) implements PaginationHelper<E> {
 
   @Override
   public Page<E> fetchPage(
-      String sqlCountRows,
-      String sqlFetchRows,
-      Object[] args,
-      int pageNo,
-      int pageSize,
-      RowMapper<E> rowMapper) {
+          String sqlCountRows,
+          String sqlFetchRows,
+          Object[] args,
+          int pageNo,
+          int pageSize,
+          RowMapper<E> rowMapper) {
     return fetchPage(sqlCountRows, sqlFetchRows, args, pageNo, pageSize, null, rowMapper);
   }
 
   @Override
   public Page<E> fetchPage(
-      String sqlCountRows,
-      String sqlFetchRows,
-      Object[] args,
-      int pageNo,
-      int pageSize,
-      Long lastMaxId,
-      RowMapper<E> rowMapper) {
+          String sqlCountRows,
+          String sqlFetchRows,
+          Object[] args,
+          int pageNo,
+          int pageSize,
+          Long lastMaxId,
+          RowMapper<E> rowMapper) {
     if (pageNo <= 0 || pageSize <= 0) {
       throw new IllegalArgumentException("pageNo and pageSize must be greater than zero");
     }
 
     // Query the total number of current records
-    Integer rowCountInt = jdbcTemplate.queryForObject(sqlCountRows, args, Integer.class);
+    Integer rowCountInt = jdbcTemplate.queryForObject(sqlCountRows, Integer.class, args);
     if (rowCountInt == null) {
       throw new IllegalArgumentException("fetchPageLimit error");
     }
@@ -55,7 +50,7 @@ public class PaginationHelperImpl<E> implements PaginationHelper<E> {
     }
 
     // Create Page object
-    final Page<E> page = new Page<E>();
+    final Page<E> page = new Page<>();
     page.setPageNumber(pageNo);
     page.setPagesAvailable(pageCount);
     page.setTotalCount(rowCountInt);
@@ -65,22 +60,22 @@ public class PaginationHelperImpl<E> implements PaginationHelper<E> {
     }
 
     final int startRow = (pageNo - 1) * pageSize;
-    String selectSql = "";
+    String selectSql;
     if (lastMaxId != null) {
       selectSql =
-          sqlFetchRows
-              + " AND id > "
-              + lastMaxId
-              + " ORDER BY id ASC"
-              + " LIMIT "
-              + 0
-              + ","
-              + pageSize;
+              sqlFetchRows
+                      + " AND id > "
+                      + lastMaxId
+                      + " ORDER BY id ASC"
+                      + " LIMIT "
+                      + 0
+                      + ","
+                      + pageSize;
     } else {
       selectSql = sqlFetchRows + " LIMIT " + startRow + "," + pageSize;
     }
 
-    List<E> result = jdbcTemplate.query(selectSql, args, rowMapper);
+    List<E> result = jdbcTemplate.query(selectSql, rowMapper, args);
     for (E item : result) {
       page.getPageItems().add(item);
     }
@@ -89,12 +84,12 @@ public class PaginationHelperImpl<E> implements PaginationHelper<E> {
 
   @Override
   public Page<E> fetchPageLimit(
-      String sqlCountRows,
-      String sqlFetchRows,
-      Object[] args,
-      int pageNo,
-      int pageSize,
-      RowMapper<E> rowMapper) {
+          String sqlCountRows,
+          String sqlFetchRows,
+          Object[] args,
+          int pageNo,
+          int pageSize,
+          RowMapper<E> rowMapper) {
     if (pageNo <= 0 || pageSize <= 0) {
       throw new IllegalArgumentException("pageNo and pageSize must be greater than zero");
     }
@@ -111,7 +106,7 @@ public class PaginationHelperImpl<E> implements PaginationHelper<E> {
     }
 
     // Create Page object
-    final Page<E> page = new Page<E>();
+    final Page<E> page = new Page<>();
     page.setPageNumber(pageNo);
     page.setPagesAvailable(pageCount);
     page.setTotalCount(rowCountInt);
@@ -119,7 +114,7 @@ public class PaginationHelperImpl<E> implements PaginationHelper<E> {
     if (pageNo > pageCount) {
       return page;
     }
-    List<E> result = jdbcTemplate.query(sqlFetchRows, args, rowMapper);
+    List<E> result = jdbcTemplate.query(sqlFetchRows, rowMapper, args);
     for (E item : result) {
       page.getPageItems().add(item);
     }
@@ -128,18 +123,18 @@ public class PaginationHelperImpl<E> implements PaginationHelper<E> {
 
   @Override
   public Page<E> fetchPageLimit(
-      String sqlCountRows,
-      Object[] args1,
-      String sqlFetchRows,
-      Object[] args2,
-      int pageNo,
-      int pageSize,
-      RowMapper<E> rowMapper) {
+          String sqlCountRows,
+          Object[] args1,
+          String sqlFetchRows,
+          Object[] args2,
+          int pageNo,
+          int pageSize,
+          RowMapper<E> rowMapper) {
     if (pageNo <= 0 || pageSize <= 0) {
       throw new IllegalArgumentException("pageNo and pageSize must be greater than zero");
     }
     // Query the total number of current records
-    Integer rowCountInt = jdbcTemplate.queryForObject(sqlCountRows, args1, Integer.class);
+    Integer rowCountInt = jdbcTemplate.queryForObject(sqlCountRows, Integer.class, args1);
     if (rowCountInt == null) {
       throw new IllegalArgumentException("fetchPageLimit error");
     }
@@ -151,7 +146,7 @@ public class PaginationHelperImpl<E> implements PaginationHelper<E> {
     }
 
     // Create Page object
-    final Page<E> page = new Page<E>();
+    final Page<E> page = new Page<>();
     page.setPageNumber(pageNo);
     page.setPagesAvailable(pageCount);
     page.setTotalCount(rowCountInt);
@@ -159,7 +154,7 @@ public class PaginationHelperImpl<E> implements PaginationHelper<E> {
     if (pageNo > pageCount) {
       return page;
     }
-    List<E> result = jdbcTemplate.query(sqlFetchRows, args2, rowMapper);
+    List<E> result = jdbcTemplate.query(sqlFetchRows, rowMapper, args2);
     for (E item : result) {
       page.getPageItems().add(item);
     }
@@ -168,14 +163,14 @@ public class PaginationHelperImpl<E> implements PaginationHelper<E> {
 
   @Override
   public Page<E> fetchPageLimit(
-      String sqlFetchRows, Object[] args, int pageNo, int pageSize, RowMapper<E> rowMapper) {
+          String sqlFetchRows, Object[] args, int pageNo, int pageSize, RowMapper<E> rowMapper) {
     if (pageNo <= 0 || pageSize <= 0) {
       throw new IllegalArgumentException("pageNo and pageSize must be greater than zero");
     }
     // Create Page object
-    final Page<E> page = new Page<E>();
+    final Page<E> page = new Page<>();
 
-    List<E> result = jdbcTemplate.query(sqlFetchRows, args, rowMapper);
+    List<E> result = jdbcTemplate.query(sqlFetchRows, rowMapper, args);
     for (E item : result) {
       page.getPageItems().add(item);
     }
@@ -187,7 +182,4 @@ public class PaginationHelperImpl<E> implements PaginationHelper<E> {
     jdbcTemplate.update(sql, args);
   }
 
-  public int updateLimitWithResponse(final String sql, final Object[] args) {
-    return jdbcTemplate.update(sql, args);
-  }
 }

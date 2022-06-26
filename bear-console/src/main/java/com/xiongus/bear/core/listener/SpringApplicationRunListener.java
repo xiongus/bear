@@ -10,13 +10,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
 public class SpringApplicationRunListener
     implements org.springframework.boot.SpringApplicationRunListener, Ordered {
 
-  private final SpringApplication application;
-
-  private final String[] args;
-
   public SpringApplicationRunListener(SpringApplication application, String[] args) {
-    this.application = application;
-    this.args = args;
+    super();
   }
 
   @Override

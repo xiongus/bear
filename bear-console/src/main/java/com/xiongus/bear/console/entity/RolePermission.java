@@ -1,31 +1,37 @@
 package com.xiongus.bear.console.entity;
 
+import com.xiongus.bear.common.entity.BaseEntity;
 import java.io.Serial;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 /**
- * t_sys_role_permission.
+ * 角色权限表 Entity.
  *
  * @author xiongus
  */
-@Data
+@Getter
+@Setter
 @Entity
-@Table(name = "t_sys_role_permission")
-public class RolePermission implements Serializable {
-
-  @Serial private static final long serialVersionUID = 8054129568123826336L;
+@Table(name = "role_permission")
+@SQLDelete(
+    sql =
+        "UPDATE role_permission SET deleted = 1, deleted_time = ROUND(UNIX_TIMESTAMP(NOW(4))*1000) WHERE id = ?")
+@Where(clause = "deleted = 0")
+public class RolePermission extends BaseEntity implements Serializable {
+  @Serial private static final long serialVersionUID = 4172826344698420285L;
 
   /** 标识角色的唯一ID */
-  @Id
-  @Column(name = "role_id", nullable = true, length = 20)
+  @Column(name = "role_id", length = 20, columnDefinition = "标识角色的唯一ID")
   private Long roleId;
 
   /** 标识权限的唯一ID */
-  @Column(name = "permission_id", nullable = true, length = 20)
+  @Column(name = "permission_id", length = 20, columnDefinition = "标识权限的唯一ID")
   private Long permissionId;
 }

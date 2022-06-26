@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 /** IdGeneratorManager. */
@@ -15,6 +16,14 @@ public class IdGeneratorManager {
   private final Map<String, IdGenerator> generatorMap = new ConcurrentHashMap<>();
 
   private final Function<String, IdGenerator> supplier;
+
+  @PostConstruct
+  public void init() {
+    this.register(
+        ResourceConstants.RESOURCE_USER_ID,
+        ResourceConstants.RESOURCE_ROLE_ID,
+        ResourceConstants.RESOURCE_PERMISSION_ID);
+  }
 
   /** init. */
   public IdGeneratorManager() {
