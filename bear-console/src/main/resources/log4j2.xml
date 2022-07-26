@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" schema="Log4J-V2.0.xsd" monitorInterval="600" >
+
+    <Properties>
+        <Property name="LOG_HOME">logs</Property>
+        <property name="FILE_NAME">bear</property>
+        <property name="patternLayout">[%d{yyyy-MM-dd'T'HH:mm:ss.SSSZZ}] [%level{length=5}] [%thread-%tid] [%logger] [%X{hostName}] [%X{ip}] [%X{applicationName}] [%F,%L,%C,%M] [%m] ## '%ex'%n</property>
+    </Properties>
+
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="${patternLayout}"/>
+        </Console>
+        <RollingRandomAccessFile name="appAppender" fileName="${LOG_HOME}/app-${FILE_NAME}.log" filePattern="${LOG_HOME}/app-${FILE_NAME}-%d{yyyy-MM-dd}-%i.log" >
+          <PatternLayout pattern="${patternLayout}" />
+          <Policies>
+              <TimeBasedTriggeringPolicy interval="1"/>
+              <SizeBasedTriggeringPolicy size="50MB"/>
+          </Policies>
+            <DefaultRolloverStrategy max="20">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/app-*.log">
+                        <IfLastModified age="7d">
+                            <IfAny>
+                                <IfAccumulatedFileCount exceeds="5" />
+                            </IfAny>
+                        </IfLastModified>
+                    </IfFileName>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="errorAppender" fileName="${LOG_HOME}/error-${FILE_NAME}.log" filePattern="${LOG_HOME}/error-${FILE_NAME}-%d{yyyy-MM-dd}-%i.log" >
+          <PatternLayout pattern="${patternLayout}" />
+          <Filters>
+              <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+          </Filters>              
+          <Policies>
+              <TimeBasedTriggeringPolicy interval="1"/>
+              <SizeBasedTriggeringPolicy size="50MB"/>
+          </Policies>
+            <DefaultRolloverStrategy max="20">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/error-*.log">
+                        <IfLastModified age="10d">
+                            <IfAny>
+                                <IfAccumulatedFileCount exceeds="5" />
+                            </IfAny>
+                        </IfLastModified>
+                    </IfFileName>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- 业务相关 异步logger -->
+        <AsyncLogger name="com.xiongus.bear.*" level="info" includeLocation="true">
+          <AppenderRef ref="appAppender"/>
+        </AsyncLogger>
+        <AsyncLogger name="com.xiongus.bear.*" level="info" includeLocation="true">
+          <AppenderRef ref="errorAppender"/>
+        </AsyncLogger>       
+        <Root level="info">
+            <Appender-Ref ref="CONSOLE"/>
+            <Appender-Ref ref="appAppender"/>
+            <AppenderRef ref="errorAppender"/>
+        </Root>         
+    </Loggers>
+</Configuration>

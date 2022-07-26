@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://${DB_HOST:172.16.167.128}:${DB_PORT:3306}/${DB_NAME:bear}?characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&useSSL=false&useAffectedRows=true
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:123456}
+  redis:
+    host: ${REDOS_HOST:172.16.167.128}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+    timeout: 3000
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:172.16.167.128}
+      port: 8500
+      discovery:
+        instance-id: ${spring.application.name}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://127.0.0.1:9000
