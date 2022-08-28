@@ -11,6 +11,11 @@ import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * BaseEntity.
+ *
+ * @author xiongus
+ */
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class BaseEntity {

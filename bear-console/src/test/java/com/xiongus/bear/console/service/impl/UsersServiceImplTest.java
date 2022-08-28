@@ -1,7 +1,7 @@
 package com.xiongus.bear.console.service.impl;
 
-import com.xiongus.bear.auth.User;
-import com.xiongus.bear.domain.Page;
+import com.xiongus.bear.console.entity.Users;
+import com.xiongus.bear.core.domain.Page;
 import java.util.List;
 import javax.annotation.Resource;
 import org.junit.jupiter.api.Assertions;
@@ -20,7 +20,7 @@ public class UsersServiceImplTest {
   @Test
   @Order(1)
   public void testGetUsers() {
-    Page<User> users = usersService.getUsers(1, 10);
+    Page<Users> users = usersService.getUsers(1, 10);
     Assertions.assertNotNull(users);
   }
 
@@ -51,7 +51,7 @@ public class UsersServiceImplTest {
   @Test
   @Order(5)
   public void testFindUserByUsername() {
-    User user = usersService.findUserByUsername("username");
+    Users user = usersService.findUserByUsername("username");
     Assertions.assertNull(user);
   }
 

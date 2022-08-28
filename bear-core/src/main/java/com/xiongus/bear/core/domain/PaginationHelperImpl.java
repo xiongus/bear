@@ -1,4 +1,4 @@
-package com.xiongus.bear.domain;
+package com.xiongus.bear.core.domain;
 
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;

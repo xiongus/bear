@@ -1,7 +1,7 @@
 package com.xiongus.bear.console.service;
 
-import com.xiongus.bear.auth.User;
-import com.xiongus.bear.domain.Page;
+import com.xiongus.bear.console.entity.Users;
+import com.xiongus.bear.core.domain.Page;
 import java.util.List;
 
 /** UsersService. */
@@ -36,7 +36,7 @@ public interface UsersService {
    * @param username username
    * @return user
    */
-  User findUserByUsername(String username);
+  Users findUserByUsername(String username);
 
   /**
    * get users by page.
@@ -45,7 +45,7 @@ public interface UsersService {
    * @param pageSize pageSize
    * @return user page info
    */
-  Page<User> getUsers(int pageNo, int pageSize);
+  Page<Users> getUsers(int pageNo, int pageSize);
 
   /**
    * fuzzy query user by username.

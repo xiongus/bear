@@ -2,7 +2,6 @@ package com.xiongus.bear.console.repository;
 
 import com.xiongus.bear.console.entity.Users;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public interface UsersRepository extends JpaRepository<Users, Long> {
 
-  Optional<Users> getByUsername(String username);
+  Users findByUsername(String username);
 
   @Query(value = "SELECT u.username FROM Users u where u.username like %:username%")
   List<String> findUserLikeUsername(@Param("username") String username);

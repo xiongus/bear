@@ -20,3 +20,5 @@ spring:
       connection-test-query: SELECT 1
     lifecycle:
       timeout-per-shutdown-phase: 30s
+  jackson:
+    default-property-inclusion: non_null

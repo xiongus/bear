@@ -25,7 +25,7 @@ import org.hibernate.annotations.Where;
         "UPDATE permissions SET deleted = 1, deleted_time = ROUND(UNIX_TIMESTAMP(NOW(4))*1000) WHERE id = ?")
 @Where(clause = "deleted = 0")
 public class Permissions extends BaseEntity implements Serializable {
-  @Serial private static final long serialVersionUID = 1115543166567369410L;
+  @Serial private static final long serialVersionUID = 3292968267368307374L;
 
   /** 权限名称 default : '' */
   @Column(name = "name", length = 64, columnDefinition = "权限名称")

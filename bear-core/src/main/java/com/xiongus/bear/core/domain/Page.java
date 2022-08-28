@@ -1,4 +1,4 @@
-package com.xiongus.bear.domain;
+package com.xiongus.bear.core.domain;
 
 import java.io.Serial;
 import java.io.Serializable;

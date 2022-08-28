@@ -20,6 +20,11 @@ configure(allprojects) { project ->
             mavenBom "org.junit:junit-bom:5.8.2"
         }
         dependencies {
+
+            dependency 'com.lmax:disruptor:3.4.4'
+            dependency "org.springframework.security:spring-security-oauth2-authorization-server:0.3.1"
+
+
             dependencySet(group: 'org.apache.logging.log4j', version: '2.17.2') {
                 entry 'log4j-api'
                 entry 'log4j-core'
@@ -125,6 +130,12 @@ configure(subprojects) { project ->
 
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+
+    configurations {
+        all {
+            exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        }
+    }
 
     dependencies {
         compileOnly 'org.projectlombok:lombok'

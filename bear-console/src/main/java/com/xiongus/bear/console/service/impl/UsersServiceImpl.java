@@ -1,8 +1,5 @@
 package com.xiongus.bear.console.service.impl;
 
-import com.xiongus.bear.auth.User;
-import com.xiongus.bear.console.entity.Permissions;
-import com.xiongus.bear.console.entity.Roles;
 import com.xiongus.bear.console.entity.Users;
 import com.xiongus.bear.console.repository.PermissionsRepository;
 import com.xiongus.bear.console.repository.RolesRepository;
@@ -11,19 +8,14 @@ import com.xiongus.bear.console.repository.UsersRepository;
 import com.xiongus.bear.console.service.UsersService;
 import com.xiongus.bear.core.distributed.id.IdGeneratorManager;
 import com.xiongus.bear.core.distributed.id.ResourceConstants;
-import com.xiongus.bear.domain.Page;
-import com.xiongus.bear.domain.PaginationHelper;
-import com.xiongus.bear.domain.PaginationHelperImpl;
+import com.xiongus.bear.core.domain.Page;
+import com.xiongus.bear.core.domain.PaginationHelper;
+import com.xiongus.bear.core.domain.PaginationHelperImpl;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import javax.annotation.Resource;
-import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -42,36 +34,13 @@ public class UsersServiceImpl implements UsersService {
   @Resource private IdGeneratorManager idGeneratorManager;
 
   @Override
-  public User findUserByUsername(String username) {
-    Optional<Users> optionalUsers = usersRepository.getByUsername(username);
-    if (optionalUsers.isEmpty()) {
-      return null;
-    }
-    User user = new User();
-    Users users = optionalUsers.get();
-    BeanUtils.copyProperties(users, user);
-    Optional<List<Roles>> optionalRoles = rolesRepository.findRoleByUserId(users.getId());
-    if (optionalRoles.isPresent()) {
-      List<Roles> roles = optionalRoles.get();
-      user.setRoles(roles.stream().map(Roles::getRole).collect(Collectors.toList()));
-    }
-    List<Permissions> permissions = permissionsRepository.findPermissionByUserId(users.getId());
-    if (CollectionUtils.isNotEmpty(permissions)) {
-      user.setPermissions(
-          permissions.stream()
-              .map(permission -> String.valueOf(permission.getId()))
-              .collect(Collectors.toList()));
-    }
-    return user;
-  }
-
-  @Override
-  public Page<User> getUsers(int pageNo, int pageSize) {
-    PaginationHelper<User> helper = new PaginationHelperImpl<>(jdbcTemplate);
+  public Page<Users> getUsers(int pageNo, int pageSize) {
+    PaginationHelper<Users> helper = new PaginationHelperImpl<>(jdbcTemplate);
 
     String sqlCountRows = "SELECT count(*) FROM users WHERE ";
 
-    String sqlFetchRows = "SELECT username,password,locked,enabled FROM users WHERE ";
+    String sqlFetchRows = "SELECT username,password,locked,deleted" +
+            ",id,avatar,display_name,email,mobile_number,address FROM users WHERE ";
 
     String where = " 1=1 ";
     try {
@@ -82,7 +51,7 @@ public class UsersServiceImpl implements UsersService {
           pageNo,
           pageSize,
           RowMapperManager.USER_ROW_MAPPER);
-    } catch (CannotGetJdbcConnectionException e) {
+    } catch (Exception e) {
       LOGGER.error("[db-error] " + e, e);
       throw e;
     }
@@ -110,5 +79,10 @@ public class UsersServiceImpl implements UsersService {
   @Override
   public void updateUserPassword(String username, String password) {
     usersRepository.updateUserPassword(username, password);
+  }
+
+  @Override
+  public Users findUserByUsername(String username) {
+    return usersRepository.findByUsername(username);
   }
 }

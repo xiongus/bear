@@ -1,9 +1,8 @@
 package com.xiongus.bear.console.service.impl;
 
-import com.xiongus.bear.auth.PermissionInfo;
-import com.xiongus.bear.auth.RoleInfo;
+import com.xiongus.bear.console.entity.Permissions;
 import com.xiongus.bear.console.entity.Roles;
-import com.xiongus.bear.domain.Page;
+import com.xiongus.bear.core.domain.Page;
 import java.util.List;
 import javax.annotation.Resource;
 import org.junit.jupiter.api.Assertions;
@@ -29,14 +28,14 @@ public class RolesServiceImplTest {
   @Test
   @Order(2)
   public void testGetRolesByUserName() {
-    Page<RoleInfo> roles = rolesService.getRolesByUserName("username", 1, 10);
+    Page<Roles> roles = rolesService.getRolesByUserName("username", 1, 10);
     Assertions.assertNotNull(roles);
   }
 
   @Test
   @Order(3)
   public void testHasPermission() {
-    PermissionInfo permissionInfo = new PermissionInfo();
+    Permissions permissionInfo = new Permissions();
     boolean res = rolesService.hasPermission("username", permissionInfo);
     Assertions.assertFalse(res);
   }

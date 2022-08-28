@@ -1,9 +1,8 @@
 package com.xiongus.bear.console.service;
 
-import com.xiongus.bear.auth.PermissionInfo;
-import com.xiongus.bear.auth.RoleInfo;
+import com.xiongus.bear.console.entity.Permissions;
 import com.xiongus.bear.console.entity.Roles;
-import com.xiongus.bear.domain.Page;
+import com.xiongus.bear.core.domain.Page;
 import java.util.List;
 
 /** RolesService. */
@@ -24,7 +23,7 @@ public interface RolesService {
    * @param pageSize pageSize
    * @return roles page info
    */
-  Page<RoleInfo> getRolesByUserName(String username, int pageNo, int pageSize);
+  Page<Roles> getRolesByUserName(String username, int pageNo, int pageSize);
 
   /**
    * Determine if the user has permission of the resource.
@@ -36,7 +35,7 @@ public interface RolesService {
    * @param permission permission to auth
    * @return true if granted, false otherwise
    */
-  boolean hasPermission(String username, PermissionInfo permission);
+  boolean hasPermission(String username, Permissions permission);
 
   /**
    * Add role.

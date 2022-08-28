@@ -1,4 +1,4 @@
-package com.xiongus.bear.domain;
+package com.xiongus.bear.core.domain;
 
 import org.springframework.jdbc.core.RowMapper;
 

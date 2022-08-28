@@ -1,15 +1,14 @@
 package com.xiongus.bear.console.service.impl;
 
-import com.xiongus.bear.auth.PermissionInfo;
 import com.xiongus.bear.console.entity.Permissions;
 import com.xiongus.bear.console.repository.PermissionsRepository;
 import com.xiongus.bear.console.repository.RowMapperManager;
 import com.xiongus.bear.console.service.PermissionsService;
 import com.xiongus.bear.core.distributed.id.IdGeneratorManager;
 import com.xiongus.bear.core.distributed.id.ResourceConstants;
-import com.xiongus.bear.domain.Page;
-import com.xiongus.bear.domain.PaginationHelper;
-import com.xiongus.bear.domain.PaginationHelperImpl;
+import com.xiongus.bear.core.domain.Page;
+import com.xiongus.bear.core.domain.PaginationHelper;
+import com.xiongus.bear.core.domain.PaginationHelperImpl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,8 +36,8 @@ public class PermissionsServiceImpl implements PermissionsService {
   }
 
   @Override
-  public Page<PermissionInfo> getPermissionsByRole(String role, int pageNo, int pageSize) {
-    PaginationHelper<PermissionInfo> helper = new PaginationHelperImpl<>(jdbcTemplate);
+  public Page<Permissions> getPermissionsByRole(String role, int pageNo, int pageSize) {
+    PaginationHelper<Permissions> helper = new PaginationHelperImpl<>(jdbcTemplate);
 
     String sqlCountRows =
         "SELECT count(*) FROM permissions p,role_permission rp,roles r "
@@ -77,5 +76,10 @@ public class PermissionsServiceImpl implements PermissionsService {
   @Override
   public void deletePermission(Long id) {
     this.permissionsRepository.deleteById(id);
+  }
+
+  @Override
+  public Page<Permissions> getPermissions(int pageNo, int pageSize) {
+    return null;
   }
 }

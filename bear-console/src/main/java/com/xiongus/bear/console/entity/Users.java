@@ -38,4 +38,24 @@ public class Users extends BaseEntity implements Serializable {
   /** 是否锁定，1 是 0 否 default : b'0' */
   @Column(name = "locked", length = 1, columnDefinition = "是否锁定，1 是 0 否")
   private boolean locked;
+
+  /** 头像 */
+  @Column(name = "avatar", length = 128, columnDefinition = "头像")
+  private String avatar;
+
+  /** 用户名称 */
+  @Column(name = "display_name", length = 64, columnDefinition = "用户名称")
+  private String displayName;
+
+  /** 电子邮箱 */
+  @Column(name = "email", length = 64, columnDefinition = "电子邮箱")
+  private String email;
+
+  /** 手机号码 */
+  @Column(name = "mobile_number", length = 64, columnDefinition = "手机号码")
+  private String mobileNumber;
+
+  /** 地址 */
+  @Column(name = "address", length = 64, columnDefinition = "地址")
+  private String address;
 }

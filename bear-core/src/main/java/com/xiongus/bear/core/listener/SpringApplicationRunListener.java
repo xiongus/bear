@@ -1,6 +1,6 @@
 package com.xiongus.bear.core.listener;
 
-import com.xiongus.bear.common.utils.EnvUtil;
+import com.xiongus.bear.core.utils.EnvUtil;
 import org.springframework.boot.ConfigurableBootstrapContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.core.Ordered;
@@ -26,6 +26,6 @@ public class SpringApplicationRunListener
 
   @Override
   public int getOrder() {
-    return HIGHEST_PRECEDENCE;
+    return Ordered.HIGHEST_PRECEDENCE;
   }
 }

@@ -1,6 +1,5 @@
 package com.xiongus.bear.console.utils;
 
-import java.util.UUID;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /** Password encoder tool. */
@@ -14,5 +13,7 @@ public class PasswordEncoderUtil {
     return new BCryptPasswordEncoder().encode(raw);
   }
 
-
+  public static void main(String[] args) {
+    System.out.println(encode("bear"));
+  }
 }

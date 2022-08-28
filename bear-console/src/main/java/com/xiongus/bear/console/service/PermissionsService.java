@@ -1,8 +1,7 @@
 package com.xiongus.bear.console.service;
 
-import com.xiongus.bear.auth.PermissionInfo;
 import com.xiongus.bear.console.entity.Permissions;
-import com.xiongus.bear.domain.Page;
+import com.xiongus.bear.core.domain.Page;
 import java.util.List;
 
 /** PermissionsService. */
@@ -32,7 +31,7 @@ public interface PermissionsService {
    * @param pageSize pageSize
    * @return permissions page info
    */
-  Page<PermissionInfo> getPermissionsByRole(String role, int pageNo, int pageSize);
+  Page<Permissions> getPermissionsByRole(String role, int pageNo, int pageSize);
 
   /**
    * add or update permission.
@@ -47,4 +46,14 @@ public interface PermissionsService {
    * @param id id
    */
   void deletePermission(Long id);
+
+  /**
+   * get the permissions of role by page.
+   *
+   * @param pageNo pageNo
+   * @param pageSize pageSize
+   * @return permissions page info
+   */
+  Page<Permissions> getPermissions(int pageNo, int pageSize);
+
 }

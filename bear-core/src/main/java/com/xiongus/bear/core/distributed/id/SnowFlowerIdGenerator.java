@@ -1,6 +1,6 @@
 package com.xiongus.bear.core.distributed.id;
 
-import com.xiongus.bear.common.utils.EnvUtil;
+import com.xiongus.bear.core.utils.EnvUtil;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;

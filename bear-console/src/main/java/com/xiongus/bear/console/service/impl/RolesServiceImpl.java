@@ -1,8 +1,5 @@
 package com.xiongus.bear.console.service.impl;
 
-import com.xiongus.bear.auth.AuthConstants;
-import com.xiongus.bear.auth.PermissionInfo;
-import com.xiongus.bear.auth.RoleInfo;
 import com.xiongus.bear.common.Constants;
 import com.xiongus.bear.console.entity.Permissions;
 import com.xiongus.bear.console.entity.Roles;
@@ -12,9 +9,9 @@ import com.xiongus.bear.console.service.PermissionsService;
 import com.xiongus.bear.console.service.RolesService;
 import com.xiongus.bear.core.distributed.id.IdGeneratorManager;
 import com.xiongus.bear.core.distributed.id.ResourceConstants;
-import com.xiongus.bear.domain.Page;
-import com.xiongus.bear.domain.PaginationHelper;
-import com.xiongus.bear.domain.PaginationHelperImpl;
+import com.xiongus.bear.core.domain.Page;
+import com.xiongus.bear.core.domain.PaginationHelper;
+import com.xiongus.bear.core.domain.PaginationHelperImpl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,8 +40,8 @@ public class RolesServiceImpl implements RolesService {
   }
 
   @Override
-  public Page<RoleInfo> getRolesByUserName(String username, int pageNo, int pageSize) {
-    PaginationHelper<RoleInfo> helper = new PaginationHelperImpl<>(jdbcTemplate);
+  public Page<Roles> getRolesByUserName(String username, int pageNo, int pageSize) {
+    PaginationHelper<Roles> helper = new PaginationHelperImpl<>(jdbcTemplate);
     String sqlCountRows =
         "SELECT count(*) FROM roles r,user_role ur,users u WHERE "
             + " r.id = ur.role_id and ur.user_id = u.id";
@@ -69,10 +66,12 @@ public class RolesServiceImpl implements RolesService {
         RowMapperManager.ROLE_INFO_ROW_MAPPER);
   }
 
+
+
   @Override
-  public boolean hasPermission(String username, PermissionInfo permission) {
+  public boolean hasPermission(String username, Permissions permission) {
     // update password
-    if (AuthConstants.UPDATE_PASSWORD_ENTRY_POINT.equals(permission.getResource())) {
+    if (Constants.UPDATE_PASSWORD_ENTRY_POINT.equals(permission.getResource())) {
       return true;
     }
 
@@ -89,7 +88,7 @@ public class RolesServiceImpl implements RolesService {
     }
 
     // Old global admin can pass resource 'console/':
-    if (permission.getResource().startsWith(AuthConstants.CONSOLE_RESOURCE_NAME_PREFIX)) {
+    if (permission.getResource().startsWith(Constants.CONSOLE_RESOURCE_NAME_PREFIX)) {
       return false;
     }
 

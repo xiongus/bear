@@ -1,4 +1,4 @@
-package com.xiongus.bear.common.utils;
+package com.xiongus.bear.core.utils;
 
 import org.springframework.core.env.ConfigurableEnvironment;
 

@@ -8,4 +8,4 @@
  */
 
 rootProject.name = 'bear'
-include('bear-api', 'bear-auth', 'bear-common','bear-console','bear-core','bear-gateway')
+include('bear-api', 'bear-auth', 'bear-common', 'bear-console', 'bear-core', 'bear-gateway', 'bear-market', 'bear-portal')
