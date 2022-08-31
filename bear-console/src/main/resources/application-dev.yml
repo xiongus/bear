@@ -22,6 +22,6 @@ spring:
         instance-id: ${spring.application.name}
   security:
     oauth2:
-      resourceserver:
+      resource-server:
         jwt:
           issuer-uri: http://localhost:9000

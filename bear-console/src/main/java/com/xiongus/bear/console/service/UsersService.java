@@ -1,6 +1,7 @@
 package com.xiongus.bear.console.service;
 
 import com.xiongus.bear.console.entity.Users;
+import com.xiongus.bear.console.request.UserRequest;
 import com.xiongus.bear.core.domain.Page;
 import java.util.List;
 
@@ -14,13 +15,6 @@ public interface UsersService {
    * @param password password
    */
   void createUser(String username, String password);
-
-  /**
-   * delete user.
-   *
-   * @param username username
-   */
-  void deleteUser(String username);
 
   /**
    * update password of the user.
@@ -41,11 +35,10 @@ public interface UsersService {
   /**
    * get users by page.
    *
-   * @param pageNo pageNo
-   * @param pageSize pageSize
+   * @param request request
    * @return user page info
    */
-  Page<Users> getUsers(int pageNo, int pageSize);
+  Page<Users> getUsers(UserRequest request);
 
   /**
    * fuzzy query user by username.
@@ -54,4 +47,10 @@ public interface UsersService {
    * @return usernames
    */
   List<String> findUserLikeUsername(String username);
+
+  /**
+   * delete user by id
+   * @param ids id(,) str
+   */
+  void deleteUserById(String ids);
 }

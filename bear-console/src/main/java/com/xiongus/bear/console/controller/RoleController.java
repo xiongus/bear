@@ -19,6 +19,12 @@ public class RoleController {
 
   private final RolesService rolesService;
 
+  @GetMapping("/list")
+  public Object getRoleList(){
+    return rolesService.getRoleList();
+  }
+
+
   /**
    * Get paged roles.
    *

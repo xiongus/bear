@@ -1,6 +1,7 @@
 package com.xiongus.bear.console.service.impl;
 
 import com.xiongus.bear.console.entity.Users;
+import com.xiongus.bear.console.request.UserRequest;
 import com.xiongus.bear.core.domain.Page;
 import java.util.List;
 import javax.annotation.Resource;
@@ -20,7 +21,7 @@ public class UsersServiceImplTest {
   @Test
   @Order(1)
   public void testGetUsers() {
-    Page<Users> users = usersService.getUsers(1, 10);
+    Page<Users> users = usersService.getUsers(new UserRequest("","","",1, 10));
     Assertions.assertNotNull(users);
   }
 
@@ -43,7 +44,6 @@ public class UsersServiceImplTest {
   @Test
   @Order(4)
   public void testDeleteUser() {
-    usersService.deleteUser("username");
     String sql = "delete from t_sys_user where username=?";
     //    Mockito.verify(jdbcTemplate).update(sql, "username");
   }

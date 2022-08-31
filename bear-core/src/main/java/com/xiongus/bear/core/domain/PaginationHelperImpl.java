@@ -13,6 +13,8 @@ import org.springframework.jdbc.core.RowMapper;
 public record PaginationHelperImpl<E>(
         JdbcTemplate jdbcTemplate) implements PaginationHelper<E> {
 
+  private static final String PATTERN_STR = "*";
+
   @Override
   public Page<E> fetchPage(
           String sqlCountRows,
@@ -180,6 +182,17 @@ public record PaginationHelperImpl<E>(
   @Override
   public void updateLimit(final String sql, final Object[] args) {
     jdbcTemplate.update(sql, args);
+  }
+
+  @Override
+  public String generateLikeArgument(String s) {
+    String fuzzySearchSign = "\\*";
+    String sqlLikePercentSign = "%";
+    if (s.contains(PATTERN_STR)) {
+      return s.replaceAll(fuzzySearchSign, sqlLikePercentSign);
+    } else {
+      return s;
+    }
   }
 
 }

@@ -133,4 +133,9 @@ public class RolesServiceImpl implements RolesService {
   public List<String> findRolesLikeRoleName(String role) {
     return rolesRepository.findRolesLikeRoleName(role);
   }
+
+  @Override
+  public List<Roles> getRoleList() {
+    return rolesRepository.findAll();
+  }
 }

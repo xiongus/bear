@@ -47,4 +47,6 @@ public interface PaginationHelper<E> {
       final RowMapper<E> rowMapper);
 
   void updateLimit(final String sql, final Object[] args);
+
+   String generateLikeArgument(final String s);
 }

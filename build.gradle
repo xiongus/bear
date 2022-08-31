@@ -23,7 +23,8 @@ configure(allprojects) { project ->
 
             dependency 'com.lmax:disruptor:3.4.4'
             dependency "org.springframework.security:spring-security-oauth2-authorization-server:0.3.1"
-
+            dependency 'org.mapstruct:mapstruct:1.5.2.Final'
+            dependency 'org.mapstruct:mapstruct-processor:1.5.2.Final'
 
             dependencySet(group: 'org.apache.logging.log4j', version: '2.17.2') {
                 entry 'log4j-api'
