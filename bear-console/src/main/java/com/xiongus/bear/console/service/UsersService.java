@@ -50,7 +50,10 @@ public interface UsersService {
 
   /**
    * delete user by id
+   *
    * @param ids id(,) str
    */
   void deleteUserById(String ids);
+
+  Users getUserById(String id);
 }

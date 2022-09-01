@@ -34,6 +34,11 @@ public class UserController {
     return usersService.getUsers(request);
   }
 
+  @GetMapping("/{id}")
+  public Object getUserById(@PathVariable String id){
+    return usersService.getUserById(id);
+  }
+
   @DeleteMapping("/{id}")
   public Object deleteById(@PathVariable String id) {
     usersService.deleteUserById(id);

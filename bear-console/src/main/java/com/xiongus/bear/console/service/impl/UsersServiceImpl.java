@@ -124,6 +124,17 @@ public class UsersServiceImpl implements UsersService {
   }
 
   @Override
+  public Users getUserById(String id) {
+    Optional<Users> optionalUser = usersRepository.findById(Long.parseLong(id));
+    if (optionalUser.isEmpty()) {
+      throw new IllegalArgumentException("user " + id + " not exist!");
+    }
+    Users user = optionalUser.get();
+    user.setPassword("N/A");
+    return user;
+  }
+
+  @Override
   public void createUser(String username, String password) {
     Users users = new Users();
     users.setId(idGeneratorManager.nextId(ResourceConstants.RESOURCE_USER_ID));
