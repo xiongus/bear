@@ -3,7 +3,7 @@ package com.xiongus.bear.console.service.impl;
 import com.xiongus.bear.common.Constants;
 import com.xiongus.bear.console.entity.Roles;
 import com.xiongus.bear.console.entity.Users;
-import com.xiongus.bear.console.pojo.DataStatus;
+import com.xiongus.bear.console.enums.DataStatus;
 import com.xiongus.bear.console.repository.PermissionsRepository;
 import com.xiongus.bear.console.repository.RolesRepository;
 import com.xiongus.bear.console.repository.RowMapperManager;

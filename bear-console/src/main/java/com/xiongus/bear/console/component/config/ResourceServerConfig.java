@@ -1,4 +1,4 @@
-package com.xiongus.bear.console.config;
+package com.xiongus.bear.console.component.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

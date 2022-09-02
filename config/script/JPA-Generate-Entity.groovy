@@ -33,7 +33,7 @@ config = [
                 // 父包模块名
                 module          : "console",
                 // Entity包名
-                entity          : "entity",
+                entity          : "entity.po",
                 //  Repository包名
                 repository      : "repository",
                 //  Service包名
@@ -71,7 +71,7 @@ config = [
                 parent: [
                         enable : false,
                         name   : "BaseService",
-                        package: "com.gus.cloud.common"
+                        package: "com.xiongus.bear.common"
                 ]
         ],
         // service impl 生成设置
@@ -80,7 +80,7 @@ config = [
                 parent: [
                         enable : false,
                         name   : "BaseServiceImpl",
-                        package: "com.gus.cloud.common"
+                        package: "com.xiongus.bear.common"
                 ]
         ],
         // controller 生成设置
@@ -89,7 +89,7 @@ config = [
                 parent: [
                         enable : false,
                         name   : "BaseController",
-                        package: "com.gus.cloud.common"
+                        package: "com.xiongus.bear.common"
                 ]
         ]
 ]
@@ -142,7 +142,6 @@ class Gen {
     // 生成对应的文件
     def static main(config, table, fields, dir) {
         def entityName = Utils.toUpperCamelCase(table.getName())
-
         def entityPath = dir + "/"+ (config.package.parent).replace(".", "/") + "/"+ (config.package.module).replace(".", "/") + "/" + (config.package.entity).replace(".", "/")
         def repositoryPath = dir + "/" + (config.package.parent).replace(".", "/") + "/"+ (config.package.module) + "/" + (config.package.repository).replace(".", "/")
         def servicePath = dir + "/" + (config.package.parent).replace(".", "/") + "/"+ (config.package.module) + "/" + (config.package.service).replace(".", "/")
@@ -357,7 +356,7 @@ class Gen {
     def static genService(writer, config, parentConfig, entityName, pkType) {
         writer.writeLine "package ${config.package.parent}.${config.package.module}.${config.package.service};"
         writer.writeLine ""
-        writer.writeLine "import com.gus.cloud.common.model.PageInfo;"
+        writer.writeLine "import com.xiongus.bear.common.model.PageInfo;"
         writer.writeLine "import org.springframework.stereotype.Service;"
         writer.writeLine "import ${config.package.parent}.${config.package.module}.${config.package.entity}.$entityName;"
         writer.writeLine ""
@@ -393,7 +392,7 @@ class Gen {
         }
         writer.writeLine "import org.springframework.stereotype.Service;"
         writer.writeLine ""
-        writer.writeLine "import com.gus.cloud.common.model.PageInfo;"
+        writer.writeLine "import com.xiongus.bear.common.model.PageInfo;"
         writer.writeLine "import org.springframework.data.domain.Page;"
         writer.writeLine "import org.springframework.data.domain.PageRequest;"
         writer.writeLine "import org.springframework.data.domain.Pageable;"
@@ -459,7 +458,7 @@ class Gen {
     def static genController(writer, config, parentConfig, entityName, pkType) {
         writer.writeLine "package ${config.package.parent}.${config.package.module}.${config.package.controller};"
         writer.writeLine ""
-        writer.writeLine "import com.gus.cloud.common.model.RestResultUtils;"
+        writer.writeLine "import com.xiongus.bear.common.model.RestResultUtils;"
         writer.writeLine "import ${config.package.parent}.${config.package.module}.${config.package.entity}.$entityName;"
         writer.writeLine "import ${config.package.parent}.${config.package.module}.${config.package.service}.${entityName}Service;"
         writer.writeLine "import lombok.AllArgsConstructor;"

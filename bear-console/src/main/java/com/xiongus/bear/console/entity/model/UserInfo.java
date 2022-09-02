@@ -1,4 +1,4 @@
-package com.xiongus.bear.console.utils;
+package com.xiongus.bear.console.entity.model;
 
 import com.google.common.collect.Sets;
 import com.nimbusds.jose.shaded.json.JSONArray;

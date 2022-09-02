@@ -1,4 +1,4 @@
-package com.xiongus.bear.console.pojo;
+package com.xiongus.bear.console.enums;
 
 public enum DataStatus {
 

@@ -1,5 +1,6 @@
-package com.xiongus.bear.console.config;
+package com.xiongus.bear.console.component.config;
 
+import com.xiongus.bear.console.component.CustomPermissionEvaluator;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;

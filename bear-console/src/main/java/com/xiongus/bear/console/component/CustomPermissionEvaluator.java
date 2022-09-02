@@ -1,4 +1,4 @@
-package com.xiongus.bear.console.config;
+package com.xiongus.bear.console.component;
 
 import java.io.Serializable;
 import org.springframework.security.access.PermissionEvaluator;
