@@ -46,11 +46,11 @@
                 <small>Or sign in with credentials</small>
               </div>
               <div th:if='${param.error}' class="alert alert-danger alert-dismissible text-white" role="alert">
-                Invalid username and password.
+                <span th:text="${error} "></span>
               </div>
 
               <div th:if='${param.logout}' class="alert alert-success alert-dismissible text-white" role="alert">
-                You have been logged out.
+                <span th:text="${msg} "></span>
               </div>
 
 
