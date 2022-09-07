@@ -14,22 +14,73 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class AccountController {
+public class IndexController {
 
   @GetMapping("/login")
   public String login() {
     return "login";
   }
 
-  @GetMapping("/logout")
-  @ResponseBody
-  public String logout() {
-    return "goodby";
+  @GetMapping("/login/cover")
+  public String loginCover() {
+    return "login_cover";
+  }
+
+  @GetMapping("/login/illustration")
+  public String loginIllustration() {
+    return "login_illustration";
   }
 
   @GetMapping("/register")
   public String register() {
     return "register";
+  }
+
+  @GetMapping("/register/cover")
+  public String registerCover() {
+    return "register_cover";
+  }
+
+  @GetMapping("/register/illustration")
+  public String registerIllustration() {
+    return "register_illustration";
+  }
+
+  @GetMapping("/reset")
+  public String reset() {
+    return "reset";
+  }
+
+  @GetMapping("/reset/cover")
+  public String resetCover() {
+    return "reset_cover";
+  }
+
+  @GetMapping("/reset/illustration")
+  public String resetIllustration() {
+    return "reset_illustration";
+  }
+
+  @GetMapping("/verification")
+  public String verification() {
+    return "verification";
+  }
+
+  @GetMapping("/verification/cover")
+  public String verificationCover() {
+    return "verification_cover";
+  }
+
+  @GetMapping("/verification/illustration")
+  public String verificationIllustration() {
+    return "verification_illustration";
+  }
+
+
+  @GetMapping("/logout")
+  @ResponseBody
+  public String logout() {
+    return "goodly";
   }
 
   @GetMapping("/home")
@@ -66,7 +117,7 @@ public class AccountController {
     return result;
   }
 
-  private String listToStr(Collection<GrantedAuthority> authorities){
+  private String listToStr(Collection<GrantedAuthority> authorities) {
     if (CollectionUtils.isEmpty(authorities)) {
       return null;
     }
@@ -74,6 +125,6 @@ public class AccountController {
     for (GrantedAuthority authority : authorities) {
       authorityArray.add(authority.getAuthority());
     }
-    return String.join(",",authorityArray);
+    return String.join(",", authorityArray);
   }
 }
