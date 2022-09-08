@@ -18,6 +18,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.authorization.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
@@ -46,6 +47,10 @@ public class AuthorizationServerConfig {
       throws Exception {
     OAuth2AuthorizationServerConfigurer<HttpSecurity> authorizationServerConfigurer =
         new OAuth2AuthorizationServerConfigurer<>();
+
+    //配置OIDC
+    authorizationServerConfigurer.oidc(Customizer.withDefaults());
+
     authorizationServerConfigurer.authorizationEndpoint(
         authorizationEndpoint -> authorizationEndpoint.consentPage(CUSTOM_CONSENT_PAGE_URI));
 
