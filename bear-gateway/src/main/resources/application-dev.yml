@@ -1,9 +1,4 @@
 spring:
-  session:
-    store-type: redis
-    redis:
-      flush-mode: on_save
-      namespace: gateway:session
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://${DB_HOST:172.16.185.129}:${DB_PORT:3306}/${DB_NAME:bear}?characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&useSSL=false&useAffectedRows=true
@@ -21,25 +16,13 @@ spring:
       ddl-auto: none
   security:
     oauth2:
-      client:
-        registration:
-          gateway:
-            provider: auth-server
-            clientId: gateway-client
-            clientSecret: bear
-            clientAuthenticationMethod: client_secret_basic
-            authorizationGrantType: authorization_code
-            redirectUri: http://127.0.0.1:9999/login/oauth2/code/gateway
-            scope:
-              - openid
-              - profile
-        provider:
-          auth-server:
-            authorization-uri: http://127.0.0.1:9000/oauth2/authorize
-            token-uri: http://127.0.0.1:9000/oauth2/token
-            jwk-set-uri: http://127.0.0.1:9000/oauth2/jwks
-            user-info-uri: http://127.0.0.1:9000/userinfo
-            user-name-attribute: sub
+      resource-server:
+        jwt:
+          issuer-uri: http://localhost:9000
+
+    ignore:
+      urls:
+
 
 
   cloud:
@@ -49,8 +32,6 @@ spring:
       discovery:
         instance-id: ${spring.application.name}
     gateway:
-      default-filters:
-        - TokenRelay
       routes:
         - id: auth-server
           uri: lb://auth-server
