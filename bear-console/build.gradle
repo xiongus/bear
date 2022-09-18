@@ -18,7 +18,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation "org.springframework.boot:spring-boot-starter-log4j2"
     implementation 'com.lmax:disruptor'
-
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     implementation 'com.google.guava:guava'
 
@@ -34,7 +34,7 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    testImplementation 'org.mockito:mockito-junit-jupiter:4.7.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.8.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
 
 

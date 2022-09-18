@@ -26,8 +26,11 @@ public class AuthenticationSuccessEventListener
     String username = event.getAuthentication().getPrincipal().toString();
     long count =
             redisTemplate.opsForValue().increment(Constants.LOGIN_FAILED_COUNT.concat(username));
-    long retry =
-            (long) redisTemplate.opsForValue().get(Constants.USER_LOCK_COUNT);
+    Object ojb = redisTemplate.opsForValue().get(Constants.USER_LOCK_COUNT);
+    long retry = 9L;
+    if (ojb != null) {
+      retry = Long.parseLong((String) ojb);
+    }
     if (count > retry) {
       throw new LockedException(
               messages.getMessage(

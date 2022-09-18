@@ -1,10 +1,6 @@
 server:
   port: ${SERVER_PORT:9999}
   shutdown: graceful
-  servlet:
-    session:
-      cookie:
-        name: GATEWAY-CLIENT
 
 spring:
   application:
@@ -22,5 +18,5 @@ spring:
       pool-name: DateSourceHikariCP     # 连接池名字
       max-lifetime: 1800000           # 连接的生命时长（毫秒），超时而且没被使用则被释放（retired），默认:30分钟 1800000ms
       connection-test-query: SELECT 1
-    lifecycle:
-      timeout-per-shutdown-phase: 30s
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
