@@ -120,12 +120,12 @@ public class IndexController {
     ObjectNode result = JacksonUtils.createEmptyJsonNode();
     if (authentication != null) {
       UserInfo userInfo = (UserInfo) authentication.getPrincipal();
-      result.put("id", userInfo.getId());
+      result.put("userId", userInfo.getUserId());
       result.put("username", userInfo.getUsername());
       result.put("displayName", userInfo.getDisplayName());
-      result.put("avatar", userInfo.getAvatar());
+      result.put("avatarUrl", userInfo.getAvatarUrl());
       result.put("email", userInfo.getEmail());
-      result.put("mobileNumber", userInfo.getMobileNumber());
+      result.put("phoneNumber", userInfo.getPhoneNumber());
       result.put("address", userInfo.getAddress());
       result.put("authorities", listToStr(userInfo.getAuthorities()));
     }

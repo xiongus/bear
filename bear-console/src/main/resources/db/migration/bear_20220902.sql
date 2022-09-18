@@ -61,7 +61,7 @@ CREATE TABLE `sys_audit` (
   `modify_time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '最后更新时间',
   `modify_by` varchar(32) DEFAULT '' COMMENT '最后更新人',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='审计表';
+) COMMENT='审计表';
 
 -- ----------------------------
 -- Records of sys_audit

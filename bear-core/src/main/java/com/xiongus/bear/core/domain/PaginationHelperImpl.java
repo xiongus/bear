@@ -16,7 +16,7 @@ public record PaginationHelperImpl<E>(
   private static final String PATTERN_STR = "*";
 
   @Override
-  public Page<E> fetchPage(
+  public PageDTO<E> fetchPage(
           String sqlCountRows,
           String sqlFetchRows,
           Object[] args,
@@ -27,7 +27,7 @@ public record PaginationHelperImpl<E>(
   }
 
   @Override
-  public Page<E> fetchPage(
+  public PageDTO<E> fetchPage(
           String sqlCountRows,
           String sqlFetchRows,
           Object[] args,
@@ -52,7 +52,7 @@ public record PaginationHelperImpl<E>(
     }
 
     // Create Page object
-    final Page<E> page = new Page<>();
+    final PageDTO<E> page = new PageDTO<>();
     page.setPageNumber(pageNo);
     page.setPagesAvailable(pageCount);
     page.setTotalCount(rowCountInt);
@@ -70,14 +70,14 @@ public record PaginationHelperImpl<E>(
                       + lastMaxId
                       + " ORDER BY id ASC"
                       + " LIMIT "
-                      + 0
-                      + ","
-                      + pageSize;
+                      + pageSize
+                      + " OFFSET "
+                      + 0;
     } else {
-      selectSql = sqlFetchRows + " LIMIT " + startRow + "," + pageSize;
+      selectSql = sqlFetchRows + " LIMIT " + pageSize + " OFFSET " + startRow;
     }
 
-    List<E> result = jdbcTemplate.query(selectSql, rowMapper, args);
+      List<E> result = jdbcTemplate.query(selectSql, rowMapper, args);
     for (E item : result) {
       page.getPageItems().add(item);
     }
@@ -85,7 +85,7 @@ public record PaginationHelperImpl<E>(
   }
 
   @Override
-  public Page<E> fetchPageLimit(
+  public PageDTO<E> fetchPageLimit(
           String sqlCountRows,
           String sqlFetchRows,
           Object[] args,
@@ -108,23 +108,23 @@ public record PaginationHelperImpl<E>(
     }
 
     // Create Page object
-    final Page<E> page = new Page<>();
-    page.setPageNumber(pageNo);
-    page.setPagesAvailable(pageCount);
-    page.setTotalCount(rowCountInt);
+    final PageDTO<E> pageDTO = new PageDTO<>();
+    pageDTO.setPageNumber(pageNo);
+    pageDTO.setPagesAvailable(pageCount);
+    pageDTO.setTotalCount(rowCountInt);
 
     if (pageNo > pageCount) {
-      return page;
+      return pageDTO;
     }
     List<E> result = jdbcTemplate.query(sqlFetchRows, rowMapper, args);
     for (E item : result) {
-      page.getPageItems().add(item);
+      pageDTO.getPageItems().add(item);
     }
-    return page;
+    return pageDTO;
   }
 
   @Override
-  public Page<E> fetchPageLimit(
+  public PageDTO<E> fetchPageLimit(
           String sqlCountRows,
           Object[] args1,
           String sqlFetchRows,
@@ -148,35 +148,35 @@ public record PaginationHelperImpl<E>(
     }
 
     // Create Page object
-    final Page<E> page = new Page<>();
-    page.setPageNumber(pageNo);
-    page.setPagesAvailable(pageCount);
-    page.setTotalCount(rowCountInt);
+    final PageDTO<E> pageDTO = new PageDTO<>();
+    pageDTO.setPageNumber(pageNo);
+    pageDTO.setPagesAvailable(pageCount);
+    pageDTO.setTotalCount(rowCountInt);
 
     if (pageNo > pageCount) {
-      return page;
+      return pageDTO;
     }
     List<E> result = jdbcTemplate.query(sqlFetchRows, rowMapper, args2);
     for (E item : result) {
-      page.getPageItems().add(item);
+      pageDTO.getPageItems().add(item);
     }
-    return page;
+    return pageDTO;
   }
 
   @Override
-  public Page<E> fetchPageLimit(
+  public PageDTO<E> fetchPageLimit(
           String sqlFetchRows, Object[] args, int pageNo, int pageSize, RowMapper<E> rowMapper) {
     if (pageNo <= 0 || pageSize <= 0) {
       throw new IllegalArgumentException("pageNo and pageSize must be greater than zero");
     }
     // Create Page object
-    final Page<E> page = new Page<>();
+    final PageDTO<E> pageDTO = new PageDTO<>();
 
     List<E> result = jdbcTemplate.query(sqlFetchRows, rowMapper, args);
     for (E item : result) {
-      page.getPageItems().add(item);
+      pageDTO.getPageItems().add(item);
     }
-    return page;
+    return pageDTO;
   }
 
   @Override

@@ -22,17 +22,17 @@ public record RedisUserDetailsService(
 
     public static final String DEF_USERS_BY_USERNAME_QUERY =
             "select username,password,locked,deleted"
-                    + " ,id,avatar,display_name,email,mobile_number,address "
-                    + " from users " + "where username = ?";
+                    + " ,id,avatar_url,display_name,email,phone_number,address "
+                    + " from sys_user " + "where username = ?";
 
 
-    private static final String DEF_USERS_BY_AUTHORITIES_QUERY =  "select r.role from user_role ur \n" +
-            "INNER JOIN roles r on ur.role_id = r.id\n" +
+    private static final String DEF_USERS_BY_AUTHORITIES_QUERY =  "select r.role from sys_user_role ur \n" +
+            "INNER JOIN sys_role r on ur.role_id = r.id\n" +
             "where user_id = ?\n" +
             "UNION ALL\n" +
-            "select p.resource from user_role ur \n" +
-            "INNER JOIN role_permission rp on ur.role_id = rp.role_id\n" +
-            "INNER JOIN permissions p on rp.permission_id = p.id\n" +
+            "select p.resource from sys_user_role ur \n" +
+            "INNER JOIN sys_role_permission rp on ur.role_id = rp.role_id\n" +
+            "INNER JOIN sys_permission p on rp.permission_id = p.id\n" +
             "where user_id = ?";
 
     @Override
@@ -63,24 +63,24 @@ public record RedisUserDetailsService(
                     String password = rs.getString(2);
                     boolean locked = rs.getBoolean(3);
                     boolean deleted = rs.getBoolean(4);
-                    String id = rs.getString(5);
+                    long userId = rs.getLong(5);
                     String avatar = rs.getString(6);
                     String displayName = rs.getString(7);
                     String email = rs.getString(8);
-                    String mobileNumber = rs.getString(9);
+                    String phoneNumber = rs.getString(9);
                     String address = rs.getString(10);
                     // get role and permission
-                    List<String> authorities = this.loadAuthoritiesByUserId(id);
+                    List<String> authorities = this.loadAuthoritiesByUserId(userId);
                     return new UserInfo(
                             username1, password, !deleted, true, true, !locked,
                             AuthorityUtils.createAuthorityList(authorities.toArray(new String[0])),
-                            id,avatar,displayName,email,mobileNumber,address);
+                            userId,avatar,displayName,email,phoneNumber,address);
                 };
         // @formatter:on
         return jdbcTemplate.query(DEF_USERS_BY_USERNAME_QUERY, mapper, username);
     }
 
-    private List<String> loadAuthoritiesByUserId(String userId){
+    private List<String> loadAuthoritiesByUserId(long userId){
         return jdbcTemplate.queryForList(DEF_USERS_BY_AUTHORITIES_QUERY, String.class, userId, userId);
     }
 }

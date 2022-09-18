@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 /** Pagination Utils interface. */
 public interface PaginationHelper<E> {
 
-  Page<E> fetchPage(
+  PageDTO<E> fetchPage(
       final String sqlCountRows,
       final String sqlFetchRows,
       final Object[] args,
@@ -13,7 +13,7 @@ public interface PaginationHelper<E> {
       final int pageSize,
       final RowMapper<E> rowMapper);
 
-  Page<E> fetchPage(
+  PageDTO<E> fetchPage(
       final String sqlCountRows,
       final String sqlFetchRows,
       final Object[] args,
@@ -22,7 +22,7 @@ public interface PaginationHelper<E> {
       final Long lastMaxId,
       final RowMapper<E> rowMapper);
 
-  Page<E> fetchPageLimit(
+  PageDTO<E> fetchPageLimit(
       final String sqlCountRows,
       final String sqlFetchRows,
       final Object[] args,
@@ -30,7 +30,7 @@ public interface PaginationHelper<E> {
       final int pageSize,
       final RowMapper<E> rowMapper);
 
-  Page<E> fetchPageLimit(
+  PageDTO<E> fetchPageLimit(
       final String sqlCountRows,
       final Object[] args1,
       final String sqlFetchRows,
@@ -39,7 +39,7 @@ public interface PaginationHelper<E> {
       final int pageSize,
       final RowMapper<E> rowMapper);
 
-  Page<E> fetchPageLimit(
+  PageDTO<E> fetchPageLimit(
       final String sqlFetchRows,
       final Object[] args,
       final int pageNo,
