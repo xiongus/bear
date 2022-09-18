@@ -1,6 +1,10 @@
 server:
   port: ${SERVER_PORT:9999}
   shutdown: graceful
+  servlet:
+    session:
+      cookie:
+        name: GATEWAY-CLIENT
 
 spring:
   application:

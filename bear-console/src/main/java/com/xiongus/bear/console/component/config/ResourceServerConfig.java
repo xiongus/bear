@@ -10,11 +10,9 @@ public class ResourceServerConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.mvcMatcher("/api/user/**")
-                .authorizeRequests()
-                .mvcMatchers("/api/user/**")
-                .access("hasAuthority('SCOPE_console')")
-                .and()
+        http.authorizeHttpRequests((authorize) -> authorize
+                        .anyRequest().authenticated()
+                )
                 .oauth2ResourceServer()
                 .jwt();
         return http.build();
