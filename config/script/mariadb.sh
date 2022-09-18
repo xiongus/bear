@@ -1,0 +1,1 @@
+docker run --net app -p 3306:3306 --name mariadb --restart=always  -v /usr/local/mariadb/conf:/etc/mysql/conf.d -v /usr/local/mariadb/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD='123456' -d mariadb --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci

@@ -1,9 +1,12 @@
 package com.xiongus.bear.console.controller;
 
-import com.xiongus.bear.console.service.PermissionsService;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,23 +15,31 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author xiongus
  */
-@RestController("/permission")
+@RestController
 @AllArgsConstructor
-@RequestMapping({"/api/permission", "/v1/api/permission"})
 public class PermissionController {
 
-    private final PermissionsService permissionsService;
+  @GetMapping("/v1/permissions")
+  public Object getPermissions(
+      @RequestParam(required = false) String keyword,
+      @RequestParam(required = false) String role,
+      @RequestParam(defaultValue = "1") int page,
+      @RequestParam(defaultValue = "10") int size) {
+    return null;
+  }
 
-    /**
-     * Get paged permissions.
-     *
-     * @param pageNo number index of page
-     * @param pageSize size of page
-     * @return A collection of permissions, empty set if no permission is found
-     */
-    @GetMapping
-    public Object getPermissions(@RequestParam int pageNo, @RequestParam int pageSize) {
-        return permissionsService.getPermissions(pageNo, pageSize);
-    }
+  @PostMapping("/v1/permission")
+  public Object createPermission(@RequestBody Object obj) {
+    return null;
+  }
 
+  @PutMapping("/v1/permission")
+  public Object modifyPermission(@RequestBody Object obj) {
+    return null;
+  }
+
+  @DeleteMapping("/v1/permission/{resource}/{action}")
+  public Object deletePermission(@PathVariable String resource, @PathVariable String action) {
+    return null;
+  }
 }

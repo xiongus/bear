@@ -1,14 +1,7 @@
 package com.xiongus.bear.common.entity;
 
 import java.time.LocalDateTime;
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.PrePersist;
-import javax.persistence.PreRemove;
-import javax.persistence.PreUpdate;
+import javax.persistence.*;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -21,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 public abstract class BaseEntity {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
   private Long id;
 

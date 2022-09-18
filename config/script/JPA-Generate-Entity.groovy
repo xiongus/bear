@@ -10,6 +10,8 @@ import java.util.stream.Collectors
 
 config = [
         author: "xiongus",
+        // 去除表名称前缀
+        prefix: "sys_",
         // 生成开关
         generate: [
                 entity          : true,
@@ -141,7 +143,7 @@ class Gen {
 
     // 生成对应的文件
     def static main(config, table, fields, dir) {
-        def entityName = Utils.toUpperCamelCase(table.getName())
+        def entityName = Utils.toUpperCamelCase(table.getName().replaceAll(config.prefix,""))
         def entityPath = dir + "/"+ (config.package.parent).replace(".", "/") + "/"+ (config.package.module).replace(".", "/") + "/" + (config.package.entity).replace(".", "/")
         def repositoryPath = dir + "/" + (config.package.parent).replace(".", "/") + "/"+ (config.package.module) + "/" + (config.package.repository).replace(".", "/")
         def servicePath = dir + "/" + (config.package.parent).replace(".", "/") + "/"+ (config.package.module) + "/" + (config.package.service).replace(".", "/")

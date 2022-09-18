@@ -1,0 +1,1 @@
+docker run --net app -p 6379:6379 --restart=always -v /usr/local/redis/conf:/usr/local/etc/redis --name redis redis redis-server /usr/local/etc/redis/redis.conf --appendonly yes

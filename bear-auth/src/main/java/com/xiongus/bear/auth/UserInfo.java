@@ -12,11 +12,11 @@ public class UserInfo extends User {
 
   @Serial private static final long serialVersionUID = 5946986388047856568L;
 
-  @Getter private final String id;
-  @Getter private final String avatar;
+  @Getter private final long userId;
+  @Getter private final String avatarUrl;
   @Getter private final String displayName;
   @Getter private final String email;
-  @Getter private final String mobileNumber;
+  @Getter private final String phoneNumber;
   @Getter private final String address;
 
   @JsonCreator
@@ -28,11 +28,11 @@ public class UserInfo extends User {
       @JsonProperty("credentialsNonExpired") boolean credentialsNonExpired,
       @JsonProperty("accountNonLocked") boolean accountNonLocked,
       @JsonProperty("authorities") Collection<? extends GrantedAuthority> authorities,
-      @JsonProperty("id") String id,
-      @JsonProperty("avatar") String avatar,
+      @JsonProperty("userId") long userId,
+      @JsonProperty("avatarUrl") String avatarUrl,
       @JsonProperty("displayName") String displayName,
       @JsonProperty("email") String email,
-      @JsonProperty("mobileNumber") String mobileNumber,
+      @JsonProperty("phoneNumber") String phoneNumber,
       @JsonProperty("address") String address) {
     super(
         username,
@@ -42,11 +42,11 @@ public class UserInfo extends User {
         credentialsNonExpired,
         accountNonLocked,
         authorities);
-    this.id = id;
-    this.avatar = avatar;
+    this.userId = userId;
+    this.avatarUrl = avatarUrl;
     this.displayName = displayName;
     this.email = email;
-    this.mobileNumber = mobileNumber;
+    this.phoneNumber = phoneNumber;
     this.address = address;
   }
 }
