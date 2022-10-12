@@ -52,23 +52,24 @@ public record RedisOAuth2AuthorizationService(
     if (matchesAuthorizationCode(authorization)) {
       OAuth2Authorization.Token<OAuth2AuthorizationCode> authorizationCode = authorization
               .getToken(OAuth2AuthorizationCode.class);
+      assert authorizationCode != null;
       OAuth2AuthorizationCode authorizationCodeToken = authorizationCode.getToken();
-      long between = ChronoUnit.MINUTES.between(authorizationCodeToken.getIssuedAt(),
+      long between = ChronoUnit.MINUTES.between(Objects.requireNonNull(authorizationCodeToken.getIssuedAt()),
               authorizationCodeToken.getExpiresAt());
       redisTemplate.opsForValue().set(buildKey(OAuth2ParameterNames.CODE, authorizationCodeToken.getTokenValue()),
               authorization, between, TimeUnit.MINUTES);
     }
 
     if (matchesRefreshToken(authorization)) {
-      OAuth2RefreshToken refreshToken = authorization.getRefreshToken().getToken();
-      long between = ChronoUnit.SECONDS.between(refreshToken.getIssuedAt(), refreshToken.getExpiresAt());
+      OAuth2RefreshToken refreshToken = Objects.requireNonNull(authorization.getRefreshToken()).getToken();
+      long between = ChronoUnit.SECONDS.between(Objects.requireNonNull(refreshToken.getIssuedAt()), refreshToken.getExpiresAt());
       redisTemplate.opsForValue().set(buildKey(OAuth2ParameterNames.REFRESH_TOKEN, refreshToken.getTokenValue()),
               authorization, between, TimeUnit.SECONDS);
     }
 
     if (matchesAccessToken(authorization)) {
       OAuth2AccessToken accessToken = authorization.getAccessToken().getToken();
-      long between = ChronoUnit.SECONDS.between(accessToken.getIssuedAt(), accessToken.getExpiresAt());
+      long between = ChronoUnit.SECONDS.between(Objects.requireNonNull(accessToken.getIssuedAt()), accessToken.getExpiresAt());
       redisTemplate.opsForValue().set(buildKey(OAuth2ParameterNames.ACCESS_TOKEN, accessToken.getTokenValue()),
               authorization, between, TimeUnit.SECONDS);
     }
@@ -87,12 +88,13 @@ public record RedisOAuth2AuthorizationService(
     if (matchesAuthorizationCode(authorization)) {
       OAuth2Authorization.Token<OAuth2AuthorizationCode> authorizationCode = authorization
               .getToken(OAuth2AuthorizationCode.class);
+      assert authorizationCode != null;
       OAuth2AuthorizationCode authorizationCodeToken = authorizationCode.getToken();
       keys.add(buildKey(OAuth2ParameterNames.CODE, authorizationCodeToken.getTokenValue()));
     }
 
     if (matchesRefreshToken(authorization)) {
-      OAuth2RefreshToken refreshToken = authorization.getRefreshToken().getToken();
+      OAuth2RefreshToken refreshToken = Objects.requireNonNull(authorization.getRefreshToken()).getToken();
       keys.add(buildKey(OAuth2ParameterNames.REFRESH_TOKEN, refreshToken.getTokenValue()));
     }
 

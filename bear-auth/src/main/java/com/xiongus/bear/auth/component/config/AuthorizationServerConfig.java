@@ -4,7 +4,7 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import com.xiongus.bear.auth.CommenceEntryPoint;
+import com.xiongus.bear.auth.component.ForwardLoginEntryPoint;
 import com.xiongus.bear.auth.RedisOAuth2AuthorizationConsentService;
 import com.xiongus.bear.auth.RedisOAuth2AuthorizationService;
 import com.xiongus.bear.auth.RedisRegisteredClientRepository;
@@ -59,9 +59,12 @@ public class AuthorizationServerConfig {
     http.requestMatcher(endpointsMatcher)
         .authorizeRequests(authorizeRequests -> authorizeRequests.anyRequest().authenticated())
         .exceptionHandling()
-        .authenticationEntryPoint(new CommenceEntryPoint()).and()
+        .authenticationEntryPoint(new ForwardLoginEntryPoint()).and()
         .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
         .apply(authorizationServerConfigurer);
+
+
+
     return http.build();
   }
 

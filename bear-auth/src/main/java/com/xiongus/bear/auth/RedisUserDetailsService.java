@@ -5,7 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,7 +26,7 @@ public record RedisUserDetailsService(
 
     private static final String namespace = "user_details:";
 
-    public static final String DEF_USERS_BY_USERNAME_QUERY =
+    private static final String DEF_USERS_BY_USERNAME_QUERY =
             "select username,password,locked,deleted"
                     + " ,id,avatar_url,display_name,email,phone_number,address "
                     + " from sys_user " + "where username = ?";
@@ -34,6 +40,10 @@ public record RedisUserDetailsService(
             "INNER JOIN sys_role_permission rp on ur.role_id = rp.role_id\n" +
             "INNER JOIN sys_permission p on rp.permission_id = p.id\n" +
             "where user_id = ?";
+
+    public static final String DEF_LOCK_USER_SQL = "update sys_user set locked = ? where username = ?";
+
+    public static final String DEF_CHANGE_PASSWORD_SQL = "update sys_user set password = ? where username = ?";
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -82,5 +92,37 @@ public record RedisUserDetailsService(
 
     private List<String> loadAuthoritiesByUserId(long userId){
         return jdbcTemplate.queryForList(DEF_USERS_BY_AUTHORITIES_QUERY, String.class, userId, userId);
+    }
+
+    public void lockUser(String username) {
+         jdbcTemplate.update(DEF_LOCK_USER_SQL,username,Boolean.TRUE);
+    }
+
+    public void unlockUser(String username) {
+        jdbcTemplate.update(DEF_LOCK_USER_SQL,username,Boolean.FALSE);
+    }
+
+
+    public void changePassword(String oldPassword, String newPassword) throws AuthenticationException {
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        if (currentUser == null) {
+            // This would indicate bad coding somewhere
+            throw new AccessDeniedException(
+                    "Can't change password as no Authentication object found in context " + "for current user.");
+        }
+        String username = currentUser.getName();
+        jdbcTemplate.update(DEF_CHANGE_PASSWORD_SQL, newPassword, username);
+        Authentication authentication = createNewAuthentication(currentUser, newPassword);
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authentication);
+        SecurityContextHolder.setContext(context);
+    }
+
+    private Authentication createNewAuthentication(Authentication currentAuth, String newPassword) {
+        UserDetails user = loadUserByUsername(currentAuth.getName());
+        UsernamePasswordAuthenticationToken newAuthentication = UsernamePasswordAuthenticationToken.authenticated(user,
+                null, user.getAuthorities());
+        newAuthentication.setDetails(currentAuth.getDetails());
+        return newAuthentication;
     }
 }

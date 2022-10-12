@@ -69,7 +69,7 @@ public class UserController {
       @RequestParam(value = "newPassword") String newPassword,
       @PathVariable String username) {
     User user = userService.findUserByUsername(username);
-    Preconditions.checkState(user == null, "User %s doesn't exists!", username);
+    Preconditions.checkState(user != null, "User %s doesn't exists!", username);
     String password = user.getPassword();
     try {
       if (PasswordEncoderUtil.matches(oldPassword, password)) {
@@ -86,7 +86,7 @@ public class UserController {
   @DeleteMapping("/v1/user/{username}")
   public Object deleteUser(@PathVariable String username) {
     User user = userService.findUserByUsername(username);
-    Preconditions.checkState(user == null, "User %s doesn't exists!", username);
+    Preconditions.checkState(user != null, "User %s doesn't exists!", username);
     // todo check role is admin ?
     userService.deleteUserById(user.getId());
     return RestResultUtils.success("delete user ok!");

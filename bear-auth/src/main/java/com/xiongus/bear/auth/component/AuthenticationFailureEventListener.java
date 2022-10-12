@@ -10,9 +10,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.authentication.event.AbstractAuthenticationFailureEvent;
+import org.springframework.security.authentication.event.AuthenticationFailureProviderNotFoundEvent;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -21,23 +22,26 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class AuthenticationSuccessEventListener
-    implements ApplicationListener<AuthenticationSuccessEvent> {
+public class AuthenticationFailureEventListener
+    implements ApplicationListener<AbstractAuthenticationFailureEvent> {
 
   @Autowired(required = false)
-  private List<AuthenticationSuccessHandler> handlers;
+  private List<AuthenticationFailureHandler> handlers;
 
   @Override
-  public void onApplicationEvent(AuthenticationSuccessEvent event) {
+  public void onApplicationEvent(AbstractAuthenticationFailureEvent event) {
+    if (event instanceof AuthenticationFailureProviderNotFoundEvent) {
+      return;
+    }
     ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder
             .getRequestAttributes();
     HttpServletRequest request = Objects.requireNonNull(requestAttributes).getRequest();
     HttpServletResponse response = requestAttributes.getResponse();
-    Authentication authentication = (Authentication) event.getSource();
+    AuthenticationException exception = event.getException();
     if (!CollectionUtils.isEmpty(handlers)) {
-      handlers.forEach(handler -> {
+      handlers.forEach(failureHandler -> {
         try {
-          handler.onAuthenticationSuccess(request, response, authentication);
+          failureHandler.onAuthenticationFailure(request, response,exception);
         } catch (IOException | ServletException e) {
           throw new RuntimeException(e);
         }

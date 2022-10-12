@@ -5,6 +5,7 @@ import com.xiongus.bear.auth.UserInfo;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -30,8 +31,12 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 public class  DefaultSecurityConfig {
 
+  @Autowired
+  private RedisTemplate<String, Object> redisTemplate;
+
   @Bean
   SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+
     http.authorizeRequests()
         .antMatchers("/register", "/css/**", "/js/**", "/img/**", "/fonts/**")
         .permitAll()

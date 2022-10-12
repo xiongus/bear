@@ -10,9 +10,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
+import org.springframework.security.authentication.event.LogoutSuccessEvent;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -21,14 +21,14 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class AuthenticationSuccessEventListener
-    implements ApplicationListener<AuthenticationSuccessEvent> {
+public class AuthenticationLogoutEventListener
+    implements ApplicationListener<LogoutSuccessEvent> {
 
-  @Autowired(required = false)
-  private List<AuthenticationSuccessHandler> handlers;
+  @Autowired
+  private List<LogoutSuccessHandler> handlers;
 
   @Override
-  public void onApplicationEvent(AuthenticationSuccessEvent event) {
+  public void onApplicationEvent(LogoutSuccessEvent event) {
     ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder
             .getRequestAttributes();
     HttpServletRequest request = Objects.requireNonNull(requestAttributes).getRequest();
@@ -37,11 +37,11 @@ public class AuthenticationSuccessEventListener
     if (!CollectionUtils.isEmpty(handlers)) {
       handlers.forEach(handler -> {
         try {
-          handler.onAuthenticationSuccess(request, response, authentication);
+          handler.onLogoutSuccess(request, response, authentication);
         } catch (IOException | ServletException e) {
           throw new RuntimeException(e);
         }
       });
+      }
     }
-  }
 }
