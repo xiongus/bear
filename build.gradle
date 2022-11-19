@@ -12,6 +12,8 @@ plugins {
 configure(allprojects) { project ->
     apply plugin: "io.spring.dependency-management"
 
+    buildDir="${rootDir}/.gradle/build/${project.name}"
+
     dependencyManagement {
         imports {
             mavenBom 'org.springframework.boot:spring-boot-dependencies:2.7.3'
@@ -79,6 +81,8 @@ configure(subprojects) { project ->
     apply plugin: "jacoco"
     apply plugin: "java-library"
     apply plugin: "checkstyle"
+
+    buildDir="${rootDir}/.gradle/build/${project.name}"
 
     jacoco {
         toolVersion = "0.8.7"
